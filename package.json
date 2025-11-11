@@ -1,0 +1,65 @@
+{
+  "name": "weekly-planner",
+  "version": "2.0.0",
+  "description": "Advanced Weekly Planner Desktop App",
+  "main": "main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:electron\"",
+    "dev:renderer": "react-scripts start",
+    "dev:electron": "wait-on http://localhost:3000 && electron .",
+    "build": "react-scripts build && electron-builder",
+    "test": "jest",
+    "lint": "eslint main renderer"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.0",
+    "react-scripts": "^5.0.1",
+    "concurrently": "^8.2.0",
+    "wait-on": "^7.0.1",
+    "eslint": "^8.50.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.weeklyplanner.app",
+    "productName": "Weekly Planner",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main/**/*",
+      "renderer/build/**/*",
+      "shared/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
