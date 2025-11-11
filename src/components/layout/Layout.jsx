@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useWeekContext } from '../../contexts/WeekContext';
+import DayView from '../day/DayView';
+import WeekView from '../week/WeekHeader';
+import { Button } from '../common/Button';
 
 // Header Component
 function Header() {
@@ -49,29 +52,43 @@ function Header() {
       </div>
 
       <div style={{ display: 'flex', gap: '0.75rem' }}>
-        <Button 
-          variant="ghost" 
-          size="sm"
+        <button 
           onClick={handleCreateBackup}
-          style={{ color: 'white', border: '1px solid rgba(255,255,255,0.3)' }}
+          style={{ 
+            color: 'white', 
+            border: '1px solid rgba(255,255,255,0.3)',
+            background: 'transparent',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontSize: '0.875rem',
+            fontWeight: '500'
+          }}
         >
           💾 Backup
-        </Button>
-        <Button 
-          variant="ghost" 
-          size="sm"
+        </button>
+        <button 
           onClick={handleArchiveWeek}
-          style={{ color: 'white', border: '1px solid rgba(255,255,255,0.3)' }}
+          style={{ 
+            color: 'white', 
+            border: '1px solid rgba(255,255,255,0.3)',
+            background: 'transparent',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontSize: '0.875rem',
+            fontWeight: '500'
+          }}
         >
           📦 Archive Week
-        </Button>
+        </button>
       </div>
     </header>
   );
 }
 
 // Sidebar Component
-export function Sidebar({ selectedDay, onDaySelect }) {
+function Sidebar({ selectedDay, onDaySelect }) {
   const { state } = useWeekContext();
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -187,6 +204,11 @@ export default function Layout() {
           }} />
           <p>Loading your week...</p>
         </div>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </div>
     );
   }

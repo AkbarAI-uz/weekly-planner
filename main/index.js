@@ -10,6 +10,12 @@ const { registerHandlers } = require('./ipc/handlers');
 const logger = require('./utils/logger');
 const { createTray } = require('./window/tray');
 
+// IMPORTANT: Disable GPU hardware acceleration to fix GPU errors
+app.disableHardwareAcceleration();
+
+// Ignore certificate errors for SSL handshake issues
+app.commandLine.appendSwitch('ignore-certificate-errors');
+
 let mainWindow = null;
 let tray = null;
 let isQuitting = false;
@@ -40,7 +46,10 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, '../renderer/preload.js')
+      preload: path.join(__dirname, '../renderer/preload.js'),
+      // Additional security
+      sandbox: false,
+      webSecurity: true
     },
     title: 'Weekly Planner',
     backgroundColor: '#667eea',
@@ -50,22 +59,27 @@ function createWindow() {
   // Show window when ready
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    logger.info('Window shown');
   });
 
-  // In development, load from dev server
+  // Determine if in development
   const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
   
   if (isDev) {
+    // Load from dev server
     mainWindow.loadURL('http://localhost:3000').catch(err => {
       logger.error('Failed to load dev server', err);
-      // Fallback to production build
-      mainWindow.loadFile(path.join(__dirname, '../renderer/build/index.html'));
+      // Fallback to file
+      const htmlPath = path.join(__dirname, '../public/index.html');
+      mainWindow.loadFile(htmlPath);
     });
     
     // Open DevTools in development
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/build/index.html'));
+    // Load production build
+    const htmlPath = path.join(__dirname, '../public/index.html');
+    mainWindow.loadFile(htmlPath);
   }
 
   mainWindow.on('close', (event) => {

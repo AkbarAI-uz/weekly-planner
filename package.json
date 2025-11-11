@@ -9,8 +9,11 @@
     "dev:renderer": "react-scripts start",
     "dev:electron": "wait-on http://localhost:3000 && electron .",
     "build": "react-scripts build && electron-builder",
+    "build:win": "react-scripts build && electron-builder --win",
+    "build:mac": "react-scripts build && electron-builder --mac",
+    "build:linux": "react-scripts build && electron-builder --linux",
     "test": "jest",
-    "lint": "eslint main renderer"
+    "lint": "eslint main src"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -45,21 +48,31 @@
     "appId": "com.weeklyplanner.app",
     "productName": "Weekly Planner",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "public"
     },
     "files": [
       "main/**/*",
-      "renderer/build/**/*",
-      "shared/**/*"
+      "build/**/*",
+      "shared/**/*",
+      "renderer/preload.js",
+      "public/icon.png"
     ],
+    "extraMetadata": {
+      "main": "main/index.js"
+    },
     "mac": {
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "icon": "public/icon.png"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "public/icon.png"
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "icon": "public/icon.png",
+      "category": "Office"
     }
   }
 }
